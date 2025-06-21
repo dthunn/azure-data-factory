@@ -1,0 +1,77 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "covid-reporting-adf-dthunn"
+		},
+		"is_ablob_coverreportingsa_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'is_ablob_coverreportingsa'"
+		},
+		"is_adls_covidreportingdl_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'is_adls_covidreportingdl'"
+		},
+		"is_adls_covidreportingdl_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://covidreportingdldthunn.dfs.core.windows.net/"
+		},
+		"is_http_opendata_ecdc_europe_eu_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().sourceBaseURL}"
+		},
+		"Covid trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/79356820-61b4-47bc-801e-1b2a6f2a6573/resourceGroups/covid-reporting-rg/providers/Microsoft.Storage/storageAccounts/covidreportingdthunn"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "covid-reporting-adf-dthunn_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"is_ablob_coverreportingsa_connectionString": {
+						"value": "[parameters('is_ablob_coverreportingsa_connectionString')]"
+					},
+					"is_adls_covidreportingdl_accountKey": {
+						"value": "[parameters('is_adls_covidreportingdl_accountKey')]"
+					},
+					"is_adls_covidreportingdl_properties_typeProperties_url": {
+						"value": "[parameters('is_adls_covidreportingdl_properties_typeProperties_url')]"
+					},
+					"is_http_opendata_ecdc_europe_eu_properties_typeProperties_url": {
+						"value": "[parameters('is_http_opendata_ecdc_europe_eu_properties_typeProperties_url')]"
+					},
+					"Covid trigger_properties_typeProperties_scope": {
+						"value": "[parameters('Covid trigger_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
