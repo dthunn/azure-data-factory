@@ -1,0 +1,9 @@
+{
+	"name": "covid-reporting-adf-dthunn",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d42f14cf-215c-4fff-b432-897eb04654dd",
+		"tenantId": "f931e30f-6406-4ee6-a466-c73720caafef"
+	}
+}
