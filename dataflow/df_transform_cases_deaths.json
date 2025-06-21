@@ -19,11 +19,16 @@
 					"name": "CountryLookup"
 				}
 			],
-			"sinks": [],
-			"transformations": [
+			"sinks": [
 				{
-					"name": "FilterEuropeOnly"
-				},
+					"dataset": {
+						"referenceName": "ds_transform_cases_deaths",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
 				{
 					"name": "SelectOnlyRequiredFields"
 				},
@@ -35,6 +40,9 @@
 				},
 				{
 					"name": "SelectForSink"
+				},
+				{
+					"name": "filter1"
 				}
 			],
 			"scriptLines": [
@@ -62,8 +70,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> CountryLookup",
-				"CasesAndDeathsSource filter(continent == 'Europe' && not(isNull(country_code))) ~> FilterEuropeOnly",
-				"FilterEuropeOnly select(mapColumn(",
+				"filter1 select(mapColumn(",
 				"          country,",
 				"          country_code,",
 				"          population,",
@@ -99,7 +106,15 @@
 				"          source",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectForSink"
+				"     skipDuplicateMapOutputs: true) ~> SelectForSink",
+				"CasesAndDeathsSource filter(continent == 'Europe' && not(isNull(country_code))) ~> filter1",
+				"SelectForSink sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
