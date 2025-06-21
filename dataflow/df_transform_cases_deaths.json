@@ -25,7 +25,7 @@
 						"referenceName": "ds_transform_cases_deaths",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "CasesAndDeathsSink"
 				}
 			],
 			"transformations": [
@@ -110,11 +110,13 @@
 				"CasesAndDeathsSource filter(continent == 'Europe' && not(isNull(country_code))) ~> filter1",
 				"SelectForSink sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['cases_and_deaths.csv'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> CasesAndDeathsSink"
 			]
 		}
 	}
